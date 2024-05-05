@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const UserModel = require("../../models/userModel");
+const UserModel = require("../models/userModel");
 const Joi = require("joi");
 const bcrypt = require('bcrypt');
 const fs = require('fs');
@@ -10,10 +10,7 @@ async function register(req, res) {
         firstName: Joi.string().alphanum().min(3).max(30),
         lastName: Joi.string().alphanum().min(3).max(30),
         email: Joi.string().email(),
-        password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
-        country: Joi.string().alphanum().min(3).max(30),
-        state: Joi.string().alphanum().min(3).max(30),
-        mobile: Joi.string().regex(/^[0-9]{10}$/)
+        password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
     });
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
@@ -33,10 +30,7 @@ async function register(req, res) {
             firstName: data.firstName,
             lastName: data.lastName,
             email: data.email,
-            password: hashedPassword,
-            country: data.country,
-            state: data.state,
-            mobile: data.mobile,
+            password: hashedPassword
 
         });
         console.log(userCreate, "usercreate.......");
@@ -131,9 +125,6 @@ async function profileUpdate(req, res) {
         firstName: Joi.string().alphanum().min(3).max(30),
         lastName: Joi.string().alphanum().min(3).max(30),
         email: Joi.string().email(),
-        country: Joi.string().alphanum().min(3).max(30),
-        state: Joi.string().alphanum().min(3).max(30),
-        mobile: Joi.string().regex(/^[0-9]{10}$/),
         image: Joi.allow(),
     });
 
@@ -145,33 +136,6 @@ async function profileUpdate(req, res) {
             status: false
         });
     };
-
-    if (req.files?.photo) {
-        let uploadedFile = req.files.photo;
-        {
-            var photo = '/img/' + new Date().getTime() + "." + uploadedFile.mimetype.slice(6)
-
-            // Use the mv() method to place the file somewhere on your server'
-            uploadedFile.mv('./public' + photo, function (err) {
-                if (err) return res.json({
-                    message: err,
-                    status: false
-                });
-                // File uploaded successfully
-            });
-            data.photo = photo
-        }
-        var findUser = await UserModel.findOne({ _id: req.payload._id });
-        if (findUser.photo) {
-            fs.unlink('./public' + findUser.photo, (err) => {
-                if (err) {
-                    console.error(err);
-                    return;
-                }
-                console.log('File deleted successfully');
-            });
-        }
-    }
 
     var checkEmail = await UserModel.findOne({ email: data.email });
     if (checkEmail == null) {
@@ -185,14 +149,7 @@ async function profileUpdate(req, res) {
             status: false,
             message: "Email is alredy Declare",
         });
-    }
-
-    // var profileUpdate = await UserModel.updateOne({ _id: req.payload._id }, data, { upsert: true });
-    // console.log(profileUpdate, "profile update............................");
-    // res.json({
-    //     status: true,
-    //     message: "Profile Updated"
-    // });
+    };
 };
 
 async function profileRemove(req, res) {

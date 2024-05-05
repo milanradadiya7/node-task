@@ -1,9 +1,10 @@
 const express = require('express');
 const jwt = require("jsonwebtoken");
 
-const { register, login, profile, profileUpdate, profileRemove, changePass, } = require("./views/apiController/authApiController/authApiController");
-const { userList, userprofile, userRemove, userUpdate, } = require('./views/apiController/userApiController/userApiController');
+const { register, login, profile, profileUpdate, profileRemove, changePass, } = require("./views/apiController/authApiController");
+const { userList, userprofile, userRemove, userUpdate, } = require('./views/apiController/userApiController');
 const { sendOtp } = require('./views/apiController/otpApiController');
+const { userProductCreate, productget, ProductUpdateGet, ProductUpdatePost, productRemove } = require('./views/apiController/productApiController');
 
 const route = express.Router();
 
@@ -46,6 +47,12 @@ route.delete("/api/user-remove/:userId", verify, userRemove);
 route.post("/api/sendOtp", verify, sendOtp);
 // router.get('/api/verifyOTP', verifyOTP);
 
+
+route.post("/api/product-create", userProductCreate);
+route.get("/api/productget", productget);
+route.get("/api/product-updateget/:userId", ProductUpdateGet);
+route.put("/api/product-update/:userId", ProductUpdatePost);
+route.delete("/api/product-remove", productRemove);
 
 
 

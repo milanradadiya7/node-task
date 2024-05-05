@@ -1,6 +1,6 @@
 const Joi = require("joi");
 const fs = require("fs");
-const UserModel = require("../../models/userModel");
+const UserModel = require("../models/userModel");
 
 async function userList(req, res) {
     var UserList = await UserModel.find({});
@@ -46,37 +46,7 @@ async function userUpdate(req, res) {
         });
     };
 
-
-    if (req.files?.photo) {
-        let uploadedFile = req.files.photo;
-        {
-            var photo = '/img/' + new Date().getTime() + "." + uploadedFile.mimetype.slice(6)
-
-            // Use the mv() method to place the file somewhere on your server'
-            uploadedFile.mv('./public' + photo, function (err) {
-                if (err) return res.json({
-                    message: err,
-                    status: false
-                });
-                // File uploaded successfully
-            });
-            data.photo = photo
-        }
-        var findUser = await UserModel.findOne({ _id: req.payload._id });
-        if (findUser.photo) {
-            fs.unlink('./public' + findUser.photo, (err) => {
-                if (err) {
-                    console.error(err);
-                    return;
-                }
-                console.log('File deleted successfully');
-            });
-        }
-    }
-
-
     await UserModel.updateOne({ _id: req.params.userId }, data, { upsert: true });
-
     res.json({
         status: true,
         message: "User Updated"

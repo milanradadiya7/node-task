@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 var cors = require('cors');
 const fileUpload = require("express-fileupload");
 
-mongoose.connect("mongodb://localhost:27017/user", {
+mongoose.connect("mongodb://localhost:27017/pracrical-task", {
     useUnifiedTopology: true,
     useNewUrlParser: true,
 });
