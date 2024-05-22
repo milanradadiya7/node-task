@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 // var mongoosePaginate = require('mongoose-paginate-v2');
 
 var schema = new mongoose.Schema({
+    productImage: {
+        type: String,
+        require: true,
+        default: "/avatar.png"
+    },
     productName: {
         type: String,
         require: true
@@ -10,20 +15,8 @@ var schema = new mongoose.Schema({
         type: String,
         require: true
     },
-    categories: {
-        type: String,
-        require: true
-    },
     productPrice: {
         type: Number,
-        require: true
-    },
-    productRating: {
-        type: String,
-        require: true
-    },
-    productSizeandColor: {
-        type: String,
         require: true
     },
     productBrand: {

@@ -50,7 +50,6 @@ async function register(req, res) {
 
 
 async function login(req, res) {
-
     const data = req.body;
 
     // Validate request data
@@ -66,7 +65,7 @@ async function login(req, res) {
             message: error.message,
             status: false
         });
-    }
+    };
 
     // Find user by email
     const loginUser = await UserModel.findOne({ email: data.email });
@@ -76,7 +75,7 @@ async function login(req, res) {
             message: "Login Failed: User not found",
             data: null
         });
-    }
+    };
 
     // Generate JWT token
     const token = jwt.sign({
@@ -96,7 +95,7 @@ async function login(req, res) {
             status: false,
             message: "Login Failed: Incorrect password",
         });
-    }
+    };
 
     res.json({
         token: token,
@@ -104,7 +103,6 @@ async function login(req, res) {
         message: "Login Success",
         data: loginUser
     });
-
 };
 
 async function profile(req, res) {
